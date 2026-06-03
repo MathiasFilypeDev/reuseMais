@@ -1,0 +1,6 @@
+@ReusePlusApi_HostAddress = http://localhost:5280
+
+GET {{ReusePlusApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

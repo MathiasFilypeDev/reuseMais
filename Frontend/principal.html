@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Principal - Reuse+</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="assets/faveicon-reuseMais.png" type="image/x-icon">
+
+    <style>
+        .card {
+            max-width: 240px;
+            /* cards mais estreitos */
+            margin: auto;
+        }
+    
+        .card img {
+            height: 160px;
+            /* altura menor, estilo paisagem */
+            width: 100%;
+            /* ocupa toda a largura */
+            object-fit: cover;
+            /* corta excesso e mantém proporção */
+            border-radius: 6px;
+            /* acabamento suave */
+        }
+    
+        .card-body {
+            padding: 0.6rem;
+            /* menos espaçamento interno */
+        }
+    
+        .card-title {
+            font-size: 0.95rem;
+            font-weight: bold;
+        }
+    
+        .card-text {
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+        }
+    
+        .btn {
+            font-size: 0.85rem;
+            padding: 0.35rem;
+        }
+    </style>
+
+</head>
+
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-center">
+        <a class="btn btn-outline-success m-1" href="index.html">Home</a>
+        <a class="btn btn-outline-light m-1" href="principal.html">Principal</a>
+        <a class="btn btn-outline-info m-1" href="about.html">Sobre</a>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-column flex-md-row">
+            <h3 class="m-1 ">Itens disponíveis</h3>
+            <button type="button" class="btn btn-success mt-2" onclick="window.location.href='cadastroItens.html'">
+                Cadastrar novo item
+            </button>
+        </div>
+
+        <div class="row g-3 justify-content-center">
+
+            <!-- Item 1 -->
+            <div class="col-6 col-md-4 mb-3">
+                <div class="card shadow h-100">
+                    <img src="assets/camisa.png" class="img-fluid p-3" alt="Camisa masculina M">
+                    <div class="card-body">
+                        <h5 class="card-title">Camisa masculina tamanho M</h5>
+                        <p class="card-text">Camisa em ótimo estado, pouco usada.</p>
+                        <p class="card-text"><strong>Categoria:</strong> Roupas</p>
+                        <p class="card-text"><strong>Disponibilidade:</strong> Imediata</p>
+                        <p class="card-text"><strong>Prazo:</strong> 3 dias úteis</p>
+                        <p class="card-text"><strong>Localização:</strong> Rua das Flores, 123</p>
+                        <p class="card-text"><strong>Qtd:</strong> 6</p>
+                        <p class="card-text"><strong>Status:</strong> Sem propostas</p>
+                        <button class="btn btn-outline-primary w-100">Tenho interesse</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="col-6 col-md-4 mb-3">
+                <div class="card shadow h-100">
+                    <img src="assets/telhaP.png" class="img-fluid width-100" alt="Telha portuguesa">
+                    <div class="card-body">
+                        <h5 class="card-title">Telha portuguesa</h5>
+                        <p class="card-text">Telha tradicional portuguesa, resistente e em bom estado.</p>
+                        <p class="card-text"><strong>Categoria:</strong> Materiais de construção</p>
+                        <p class="card-text"><strong>Disponibilidade:</strong> Em estoque</p>
+                        <p class="card-text"><strong>Prazo:</strong> 5 dias úteis</p>
+                        <p class="card-text"><strong>Localização:</strong> Rua das Palmeiras, 45</p>
+                        <p class="card-text"><strong>Qtd:</strong> 12</p>
+                        <p class="card-text"><strong>Status:</strong> Sem propostas</p>
+                        <button class="btn btn-outline-primary w-100">Tenho interesse</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer text-center mt-4 fs-6 bg-dark text-white py-2">
+        <small>© <span id="currentYear"></span> Reuse+. Todos os direitos reservados.</small>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

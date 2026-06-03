@@ -1,0 +1,400 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos pagina cadastro.html */
+#bodyPrincipal {
+    font-family: Arial, sans-serif;
+    background-color: #161010;
+    color: #333;
+    padding: 20px;
+}
+
+
+#navBar-home button:hover,
+#navBar-cadastroItem:hover,
+#navBar-cadastro button:hover,
+#navBar-about button:hover {
+    transform: translateY(-3px);
+    box-shadow: 1px 3px 4px rgba(219, 217, 217, 0.575);
+}
+#navBar-principal button:hover {
+    transform: translateY(-3px);
+    box-shadow: 1px 4px 8px rgba(219, 217, 217, 0.575);
+}
+
+@keyframes floating {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+#logo-about {
+    animation: floating 3s ease-in-out infinite;
+}
+
+/* Estilos para o formulário de cadastro */
+#formCadastro {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 400px;
+    margin: auto;
+}
+
+.title_cadastro {
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto 20px;
+    color: #FFFFFF;
+    box-shadow: 1px 1px 3px rgba(255, 255, 255, 0.877);
+    padding: 10px;
+}
+
+#msgCadastro {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2000;
+    min-width: 280px;
+    width: auto;
+}
+
+#msgCadastro .alert {
+    margin-bottom: 0;
+}
+
+#navBar-cadastro {
+    margin-bottom: 20px;
+}
+
+#navBar-cadastro a {
+    text-decoration: none;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#formCadastro button {
+    width: 100%;
+    padding: 10px;
+    font-size: 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#formCadastro button:hover {
+    background-color: #3b3a3a;
+    box-shadow: 1px 4px 8px rgba(219, 217, 217, 0.575);
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    60% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+
+    80% {
+        transform: scale(0.9);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+#formCadastro {
+    animation: bounceIn 0.5s ease;
+}
+
+@keyframes floating {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+#formCadastro, #formLogin {
+    animation: floating 3s ease-in-out infinite;
+}
+
+/* -------------------------------- */
+
+/* Estilos pagina principal.html */
+#listaItens {
+    cursor: pointer;
+}
+
+/* Estilos index*/
+
+@keyframes rotating {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#logoHome {
+    animation: rotating 5s linear infinite;
+    display: inline-block;
+}
+
+.footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin-top: 2rem;
+    padding-top: 1rem;
+    color: #cdd5df;
+    font-size: 0.95rem;
+    background: rgba(10, 15, 22, 0.96);
+}
+
+.footer small {
+    color: #d9e2ef;
+}
+
+
+/* Melhor visibilidade geral */
+html,
+body {
+    min-height: 100vh;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    color: #f4f4f4;
+    background-color: #0a0f16;
+    padding-top: 76px;
+}
+
+.page-content {
+    flex: 1;
+}
+
+footer.footer {
+    margin-top: auto;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1100;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+.navbar button,
+.navbar a {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.btn {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.btn:hover,
+.btn:focus {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    opacity: 0.95;
+}
+
+.btn-outline-success,
+.btn-outline-light,
+.btn-outline-info {
+    border-width: 2px;
+}
+
+.btn-outline-light {
+    color: #f8f9fa;
+    border-color: rgba(248, 249, 250, 0.8);
+}
+
+.btn-outline-success {
+    color: #c8f7c5;
+    border-color: rgba(144, 238, 144, 0.8);
+}
+
+.btn-outline-info {
+    color: #cce7ff;
+    border-color: rgba(204, 231, 255, 0.8);
+}
+
+.card,
+.form-group,
+.container,
+main,
+#itemFormContainer,
+#formCadastro {
+    background-color: rgba(15, 23, 34, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #eff2f7;
+}
+
+.card {
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
+}
+
+.form-control,
+.form-select,
+textarea {
+    background-color: #121921;
+    color: #f4f4f4;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.form-control:focus,
+.form-select:focus,
+textarea:focus {
+    border-color: #6de0ff;
+    box-shadow: 0 0 0 0.2rem rgba(109, 224, 255, 0.25);
+    background-color: #111a24;
+    color: #ffffff;
+}
+
+.auth-subtitle {
+    color: rgba(255, 255, 255, 0.84) !important;
+}
+
+#formCadastro .text-muted {
+    color: rgba(255, 255, 255, 0.78) !important;
+}
+
+#formCadastro a {
+    color: #8cdcff;
+    font-weight: 700;
+}
+
+#formCadastro a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.form-control::placeholder,
+textarea::placeholder {
+    color: rgba(255, 255, 255, 0.452);
+    opacity: 1;
+}
+
+.form-control:focus::placeholder,
+textarea:focus::placeholder {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.alert {
+    background-color: rgba(255, 255, 255, 0.14);
+    color: #f9fafc;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-left-width: 4px;
+    border-radius: 0.65rem;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+    font-weight: 700;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.alert:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.35);
+}
+
+.alert-success {
+    background-color: rgba(45, 209, 167, 0.24);
+    border-color: rgba(45, 209, 167, 0.75);
+    color: #e5fff5;
+}
+
+.alert-danger {
+    background-color: rgba(255, 90, 90, 0.24);
+    border-color: rgba(255, 90, 90, 0.85);
+    color: #ffe6e6;
+}
+
+.alert-warning {
+    background-color: rgba(255, 190, 76, 0.24);
+    border-color: rgba(255, 190, 76, 0.95);
+    color: #fff8dd;
+}
+
+.alert-info {
+    background-color: rgba(102, 184, 255, 0.24);
+    border-color: rgba(102, 184, 255, 0.9);
+    color: #eaf5ff;
+}
+
+label,
+.form-label,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+small {
+    color: #f6f8fb;
+}
+
+.alert {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.text-center h1,
+.text-center h2,
+#formCadastro h2,
+#formCadastro h3 {
+    color: #ffffff;
+}
+
+.bg-light {
+    background-color: #101820 !important;
+}
+
+.bg-black {
+    background-color: #05070b !important;
+}
+
+@media (max-width: 768px) {
+    .navbar button {
+        margin: 0.25rem 0.2rem;
+    }
+    .form-group,
+    .card,
+    .container {
+        padding: 1.2rem;
+    }
+}
