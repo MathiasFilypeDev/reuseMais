@@ -25,7 +25,7 @@
 O **ReusePlus** é um sistema de gestão de estoque voltado para reaproveitamento e sustentabilidade.  
 Ele permite:
 - Cadastro de usuários com autenticação segura (JWT + BCrypt).  
-- Login tradicional (email/senha) e login social com **Google OAuth**.  
+- Login tradicional (email/senha).  
 - Cadastro de itens no estoque.  
 - Registro de movimentações (entradas e saídas).  
 - Relatórios detalhados com estatísticas e gráficos (Chart.js).  
