@@ -46,23 +46,24 @@ Ele permite:
 ### Backend (`ReusePlusApi`)
 
 ```bash
-📂 ReusePlusApi
- ├── 📂 bin
- ├── 📂 Controllers
- │    ├── 📄 UsuarioController.cs
- │    ├── 📄 ItemController.cs
- │    ├── 📄 MovimentacaoController.cs
- │    └── 📄 RelatorioController.cs
- ├── 📂 Data
- │    └── 📄 AppDbContext.cs
- ├── 📂 obj
- ├── 📂 Properties
- ├── 📄 .editorconfig
- ├── 📄 appsettings.Development.json
- ├── 📄 appsettings.json
- ├── 📄 Program.cs
- ├── 📄 ReusePlusApi.csproj
- └── 📄 ReusePlusApi.http
+📂├── backend
+  📂 ReusePlusApi
+   ├── 📂 bin
+   ├── 📂 Controllers
+   │    ├── 📄 UsuarioController.cs
+   │    ├── 📄 ItemController.cs
+   │    ├── 📄 MovimentacaoController.cs
+   │    └── 📄 RelatorioController.cs
+   ├── 📂 Data
+   │    └── 📄 AppDbContext.cs
+   ├── 📂 obj
+   ├── 📂 Properties
+   ├── 📄 .editorconfig
+   ├── 📄 appsettings.Development.json
+   ├── 📄 appsettings.json
+   ├── 📄 Program.cs
+   ├── 📄 ReusePlusApi.csproj
+   └── 📄 ReusePlusApi.http
 ```
 
 ### Frontend (`Frontend`)
