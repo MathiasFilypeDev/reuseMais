@@ -72,12 +72,12 @@ Ele permite:
  ├── 📂 assets
  ├── 📂 css
  ├── 📂 Js
- │    ├── 📄 about.html
- │    ├── 📄 admin.html
- │    ├── 📄 cadastro.html
- │    ├── 📄 cadastroitens.html
- │    ├── 📄 index.html
- │    ├── 📄 login.html
- │    ├── 📄 principal.html
- │    └── 📄 recebimento.html
+ ├── 📄 about.html
+ ├── 📄 admin.html
+ ├── 📄 cadastro.html
+ ├── 📄 cadastroitens.html
+ ├── 📄 index.html
+ ├── 📄 login.html
+ ├── 📄 principal.html
+ |── 📄 recebimento.html
 ```
