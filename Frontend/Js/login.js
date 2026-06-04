@@ -13,7 +13,9 @@ document.getElementById("formLogin").addEventListener("submit", async (e) => {
     if (response.ok) {
         const data = await response.json();
         alert(data.message);
-        if (data.tipo === "admin") {
+
+        // Redireciona conforme o tipo escolhido
+        if (tipo === "admin") {
             window.location.href = "admin.html";
         } else {
             window.location.href = "principal.html";
@@ -23,15 +25,9 @@ document.getElementById("formLogin").addEventListener("submit", async (e) => {
     }
 });
 
-async function login(email, senha) {
-    if (!validarCamposLogin(email, senha)) return;
-}
-
 function handleCredentialResponse(response) {
-    // Token JWT do Google
     const googleToken = response.credential;
 
-    // Enviar para o backend para trocar por JWT interno
     fetch("/api/externalauth/google", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
