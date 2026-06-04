@@ -40,8 +40,15 @@
 
                 <!-- Campos de login -->
                 <div class="mb-3">
-                    <label class="form-label font-weight-bold">Email/Usuário</label>
-                    <input type="text" id="loginUser" class="form-control" placeholder="Digite seu usuário" required>
+                    <div class="mb-3">
+                        <label class="form-label font-weight-bold">Email/Usuário</label>
+                        <input type="text" id="loginUser" class="form-control" placeholder="Digite seu usuário"
+                            required>
+                        <div id="emailError" class="text-danger mt-1" style="display:none;">
+                            Email inválido! Use o formato nome@exemplo.com
+                        </div>
+                    </div>
+
                 </div>
                 <div class="mb-3">
                     <label class="form-label font-weight-bold">Senha</label>
