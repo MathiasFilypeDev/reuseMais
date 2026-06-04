@@ -130,3 +130,17 @@ function handleCredentialResponse(response) {
             alert("Login com Google realizado!");
         });
 }
+
+function validarSenha(senha) {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+    return regex.test(senha);
+}
+
+document.getElementById("formCadastro").addEventListener("submit", function (event) {
+    const senha = document.getElementById("senha").value;
+
+    if (!validarSenha(senha)) {
+        event.preventDefault(); // impede envio
+        alert("A senha deve ter pelo menos uma letra maiúscula, uma minúscula, um número e no mínimo 6 caracteres.");
+    }
+});

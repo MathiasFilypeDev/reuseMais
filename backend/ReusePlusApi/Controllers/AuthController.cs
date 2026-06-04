@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
 using Google.Apis.Auth;
+using System.Text.RegularExpressions;
+
 
 namespace ReusePlusApi.Controllers
 {
@@ -103,4 +105,15 @@ public class ExternalAuthController : ControllerBase
 public class GoogleTokenRequest
 {
     public string Token { get; set; }
+}
+
+
+public static class SenhaValidator
+{
+    public static bool ValidarSenha(string senha)
+    {
+        // Regex: mínimo 6 caracteres, pelo menos 1 maiúscula, 1 minúscula e 1 número
+        var regex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$");
+        return regex.IsMatch(senha);
+    }
 }
