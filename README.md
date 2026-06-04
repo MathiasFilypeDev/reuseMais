@@ -45,9 +45,39 @@ Ele permite:
 
 ### Backend (`ReusePlusApi`)
 
+```bash
+📂 ReusePlusApi
+ ├── 📂 bin
+ ├── 📂 Controllers
+ │    ├── 📄 UsuarioController.cs
+ │    ├── 📄 ItemController.cs
+ │    ├── 📄 MovimentacaoController.cs
+ │    └── 📄 RelatorioController.cs
+ ├── 📂 Data
+ │    └── 📄 AppDbContext.cs
+ ├── 📂 obj
+ ├── 📂 Properties
+ ├── 📄 .editorconfig
+ ├── 📄 appsettings.Development.json
+ ├── 📄 appsettings.json
+ ├── 📄 Program.cs
+ ├── 📄 ReusePlusApi.csproj
+ └── 📄 ReusePlusApi.http
 ```
 
+### Frontend (`Frontend`)
+
 ```
-
-
-
+📂 Frontend
+ ├── 📂 assets
+ ├── 📂 css
+ ├── 📂 Js
+ │    ├── 📄 about.html
+ │    ├── 📄 admin.html
+ │    ├── 📄 cadastro.html
+ │    ├── 📄 cadastroitens.html
+ │    ├── 📄 index.html
+ │    ├── 📄 login.html
+ │    ├── 📄 principal.html
+ │    └── 📄 recebimento.html
+```
