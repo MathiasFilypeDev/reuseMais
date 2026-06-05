@@ -46,7 +46,7 @@
                         <input type="password" id="cadSenha" class="form-control" placeholder="Digite sua senha"
                             title="Digite sua senha" required>
                         <small id="senhaError" class="text-danger mt-1" style="display:none;">
-                            A senha deve conter pelo menos 6 caracteres, incluindo uma letra maiúscula, uma minúscula e
+                            A senha deve conter pelo menos 6 caracteres, incluindo uma leta maiúscula, uma minúscula e
                             um número.
                         </small>
                     </div>
@@ -82,7 +82,12 @@
         }
 
         function validarSenha(senha) {
-            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+            // Primeiro verifica o tamanho mínimo
+            if (senha.length < 6) {
+                return false;
+            }
+            // Depois verifica se contém pelo menos uma maiúscula, uma minúscula e um número
+            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
             return regex.test(senha);
         }
 
