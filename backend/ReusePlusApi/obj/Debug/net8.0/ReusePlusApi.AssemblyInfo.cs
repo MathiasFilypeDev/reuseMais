@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ReusePlusApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+07b2a00c240d3f62f46be3aff0ad90abdc781341")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e555a99850bb5caf5c6361cd36ba606f26af28d2")]
 [assembly: System.Reflection.AssemblyProductAttribute("ReusePlusApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ReusePlusApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
