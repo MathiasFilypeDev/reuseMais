@@ -55,7 +55,7 @@
                         <input type="password" id="cadConfirmaSenha" class="form-control"
                             placeholder="Confirme sua senha" title="Digite sua senha" required>
                         <small id="confirmaSenhaError" class="text-danger mt-1" style="display:none;">
-                            As senhas não coincidem.
+                            As senhas devem ser iguais.
                         </small>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
@@ -97,11 +97,7 @@
 
             // Email
             emailInput.addEventListener("input", () => {
-                if (!validarEmail(emailInput.value)) {
-                    emailError.style.display = "block";
-                } else {
-                    emailError.style.display = "none";
-                }
+                emailError.style.display = validarEmail(emailInput.value) ? "none" : "block";
             });
             emailInput.addEventListener("blur", () => emailError.style.display = "none");
             emailInput.addEventListener("focus", () => {
@@ -110,11 +106,7 @@
 
             // Senha
             senhaInput.addEventListener("input", () => {
-                if (!validarSenha(senhaInput.value)) {
-                    senhaError.style.display = "block";
-                } else {
-                    senhaError.style.display = "none";
-                }
+                senhaError.style.display = validarSenha(senhaInput.value) ? "none" : "block";
             });
             senhaInput.addEventListener("blur", () => senhaError.style.display = "none");
             senhaInput.addEventListener("focus", () => {
@@ -123,11 +115,7 @@
 
             // Confirmação de senha
             confirmaSenhaInput.addEventListener("input", () => {
-                if (confirmaSenhaInput.value !== senhaInput.value) {
-                    confirmaSenhaError.style.display = "block";
-                } else {
-                    confirmaSenhaError.style.display = "none";
-                }
+                confirmaSenhaError.style.display = (confirmaSenhaInput.value !== senhaInput.value) ? "block" : "none";
             });
             confirmaSenhaInput.addEventListener("blur", () => confirmaSenhaError.style.display = "none");
             confirmaSenhaInput.addEventListener("focus", () => {
