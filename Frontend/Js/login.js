@@ -1,3 +1,19 @@
+document.getElementById("formLogin").addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const usuario = document.getElementById("loginUser").value;
+    const senha = document.getElementById("loginPass").value;
+
+    // Admin padrão
+    if (usuario === "Admin" && senha === "ReuseMaisAdmin") {
+        alert("Login de administrador realizado com sucesso!");
+        window.location.href = "principal.html";
+        return;
+    }
+
+    alert("Usuário ou senha inválidos.");
+});
+
 document.getElementById("formLogin").addEventListener("submit", async (e) => {
     e.preventDefault();
     const email = document.getElementById("loginUser").value;
@@ -139,3 +155,4 @@ function adicionarValidacaoTempoReal() {
 
 // Chama a função ao carregar a página
 window.onload = adicionarValidacaoTempoReal;
+
