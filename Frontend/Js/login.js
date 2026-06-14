@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     const usuarioInput = document.getElementById("loginUser");
     const senhaInput = document.getElementById("loginPass");
-    const emailError = document.getElementById("emailError");
-    const senhaError = document.getElementById("senhaError");
     const formLogin = document.getElementById("formLogin");
     const erroDiv = document.getElementById("loginError");
 
@@ -15,44 +13,56 @@ document.addEventListener("DOMContentLoaded", () => {
         erroDiv.classList.remove("d-none");
     }
 
-    function validarUsuario(valor) {
-        const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const regexUsuario = /^[a-zA-Z0-9]{3,}$/;
-        return regexEmail.test(valor) || regexUsuario.test(valor);
-    }
-
-    function validarSenha(senha) {
-        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
-        return regex.test(senha);
-    }
-
     async function realizarLogin() {
-        const usuario = usuarioInput.value;
-        const senha = senhaInput.value;
+        const usuario = usuarioInput.value.trim();
+        const senha = senhaInput.value.trim();
         const tipo = tipoSelecionado();
 
-        const response = await fetch("http://localhost:5000/api/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ Email: usuario, Senha: senha, Tipo: tipo })
-        });
+        if (!usuario || !senha) {
+            mostrarErro("Preencha todos os campos.");
+            return;
+        }
 
-        if (response.ok) {
-            const data = await response.json();
-            localStorage.setItem("token", data.token);
+        try {
+            const response = await fetch("http://localhost:5000/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ Email: usuario, Senha: senha, Tipo: tipo })
+            });
 
-            if (data.role === "admin") {
-                window.location.href = "admin.html";
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem("token", data.token);
+
+                console.log("Role recebido:", data.role);
+
+                if (data.role && data.role.toLowerCase() === "admin") {
+                    window.location.assign("admin.html"); // garante redirecionamento
+                } else {
+                    window.location.assign("principal.html");
+                }
             } else {
-                window.location.href = "principal.html";
+                mostrarErro("Credenciais inválidas. Tente novamente.");
             }
-        } else {
-            mostrarErro("Credenciais inválidas. Tente novamente.");
+        } catch (error) {
+            mostrarErro("Erro de conexão com o servidor.");
+            console.error("Erro no login:", error);
         }
     }
 
-    formLogin.addEventListener("submit", async (event) => {
+    // Clique no botão de login
+    formLogin.addEventListener("submit", (event) => {
         event.preventDefault();
         realizarLogin();
     });
+
+    // Pressionar Enter também dispara login
+    formLogin.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            realizarLogin();
+            window.location.assign("admin.html");
+        }
+    });
 });
+
