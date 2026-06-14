@@ -61,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (event.key === "Enter") {
             event.preventDefault();
             realizarLogin();
-            window.location.assign("admin.html");
         }
     });
 });
