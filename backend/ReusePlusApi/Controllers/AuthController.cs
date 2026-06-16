@@ -1,94 +1,118 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using System.Linq;
-using ReusePlusApi.Models;
-using ReusePlusApi.Data;
-using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using ReusePlusApi.Constants;
+using ReusePlusApi.DTOs;
+using ReusePlusApi.Services;
 
 namespace ReusePlusApi.Controllers
 {
+    /// <summary>
+    /// Controller responsável por autenticação e autorização
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        private readonly IConfiguration _config;
+        private readonly IAuthService _authService;
 
-        public AuthController(AppDbContext context, IConfiguration config)
+        public AuthController(IAuthService authService)
         {
-            _context = context;
-            _config = config;
+            _authService = authService;
         }
 
-        // Método auxiliar para gerar token
-        private string GerarToken(IEnumerable<Claim> claims)
-        {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                issuer: _config["Jwt:Issuer"],
-                audience: _config["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(2),
-                signingCredentials: creds);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
+        /// <summary>
+        /// Realiza login de usuário ou admin
+        /// </summary>
         [HttpPost("login")]
-        public IActionResult Login([FromBody] User login)
+        [ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
-            var adminUser = _config["AdminCredentials:User"];
-            var adminPass = _config["AdminCredentials:Password"];
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            // Validação de Admin
-            if (login.Tipo == "admin")
+            try
             {
-                if (login.Email.Equals(adminUser, StringComparison.OrdinalIgnoreCase)
-                    && login.Senha == adminPass)
-                {
-                    var claims = new[]
+                var result = await _authService.LoginAsync(request);
+                if (result == null)
+                    return Unauthorized(new ErrorResponseDto
                     {
-                        new Claim(ClaimTypes.Name, adminUser),
-                        new Claim(ClaimTypes.Role, "admin")
-                    };
-
-                    var token = GerarToken(claims);
-
-                    return Ok(new
-                    {
-                        token,
-                        role = "admin"
+                        Message = ErrorMessages.InvalidCredentials,
+                        ErrorCode = "INVALID_CREDENTIALS"
                     });
-                }
-                return Unauthorized("Credenciais inválidas.");
+
+                return Ok(result);
             }
-
-            // Validação de Usuário comum
-            var user = _context.Users.FirstOrDefault(u => u.Email == login.Email);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(login.Senha, user.Senha))
-                return Unauthorized("Credenciais inválidas.");
-
-            var userClaims = new[]
+            catch
             {
-                new Claim(ClaimTypes.Name, user.Email),
-                new Claim(ClaimTypes.Role, user.Tipo),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
-            };
+                return Unauthorized(new ErrorResponseDto
+                {
+                    Message = ErrorMessages.InvalidCredentials,
+                    ErrorCode = "LOGIN_FAILED"
+                });
+            }
+        }
 
-            var tokenUser = GerarToken(userClaims);
+        /// <summary>
+        /// Registra um novo usuário
+        /// </summary>
+        [HttpPost("register")]
+        [ProducesResponseType(typeof(SuccessResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Register([FromBody] RegisterUserRequestDto request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            return Ok(new
+            try
             {
-                token = tokenUser,
-                role = user.Tipo
-            });
+                var result = await _authService.RegisterUserAsync(request);
+                return Ok(result);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new ErrorResponseDto
+                {
+                    Message = ex.Message,
+                    ErrorCode = "REGISTRATION_FAILED"
+                });
+            }
+        }
+
+        /// <summary>
+        /// Registra um novo admin (requer chave secreta)
+        /// </summary>
+        [HttpPost("register-admin")]
+        [ProducesResponseType(typeof(SuccessResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> RegisterAdmin([FromBody] RegisterAdminRequestDto request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var result = await _authService.RegisterAdminAsync(request);
+                return Ok(result);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new ErrorResponseDto
+                {
+                    Message = ex.Message,
+                    ErrorCode = "INVALID_SECRET_KEY"
+                });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new ErrorResponseDto
+                {
+                    Message = ex.Message,
+                    ErrorCode = "REGISTRATION_FAILED"
+                });
+            }
         }
     }
 }

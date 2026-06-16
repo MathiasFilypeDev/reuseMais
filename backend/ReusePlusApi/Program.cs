@@ -1,21 +1,59 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ReusePlusApi.Data;
+using ReusePlusApi.Exceptions;
+using ReusePlusApi.Repositories;
+using ReusePlusApi.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Conexão com PostgreSQL
+// ============================================================================
+// Configuração de Banco de Dados
+// ============================================================================
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddControllers();
+// ============================================================================
+// Configuração de Controladores
+// ============================================================================
+builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.SuppressMapClientErrors = false;
+    });
 
-// Configuração de autenticação JWT
+// ============================================================================
+// Configuração de CORS
+// ============================================================================
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+// ============================================================================
+// Injeção de Dependência - Repositórios
+// ============================================================================
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IItemRepository, ItemRepository>();
+builder.Services.AddScoped<IMovimentacaoRepository, MovimentacaoRepository>();
+
+// ============================================================================
+// Injeção de Dependência - Serviços
+// ============================================================================
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IItemService, ItemService>();
+
+// ============================================================================
+// Configuração de Autenticação JWT
+// ============================================================================
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -28,16 +66,28 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured")))
         };
     });
 
+// ============================================================================
+// Configuração de Autorização
+// ============================================================================
 builder.Services.AddAuthorization();
 
+// ============================================================================
+// Configuração do Aplicativo
+// ============================================================================
 var app = builder.Build();
 
+// ============================================================================
+// Middleware
+// ============================================================================
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 app.UseRouting();
-app.UseAuthentication();   // ✅ precisa vir antes de UseAuthorization
+app.UseCors("AllowAll");
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -11,42 +11,23 @@ async function consultarRelatorio(tipo) {
     }
 
     const data = await response.json();
-
     const tbody = document.querySelector("#tabelaRelatorio tbody");
-    tbody.innerHTML = ""; // limpa tabela
+    if (!tbody) return;
+    tbody.innerHTML = "";
 
     data.forEach(mov => {
         const row = document.createElement("tr");
         row.innerHTML = `
-      <td>${mov.id}</td>
-      <td>${mov.tipo}</td>
-      <td>${mov.itemId}</td>
-      <td>${mov.quantidade}</td>
-    `;
+            <td>${mov.id}</td>
+            <td>${mov.tipo}</td>
+            <td>${mov.itemId}</td>
+            <td>${mov.quantidade}</td>
+        `;
         tbody.appendChild(row);
     });
 }
 
-function validarCamposLogin(email, senha) {
-    if (!email || !senha) {
-        alert("Preencha email e senha!");
-        return false;
-    }
-    return true;
-}
-
-function mostrarMensagem(msg, tipo = "info") {
-    const div = document.createElement("div");
-    div.textContent = msg;
-    div.style.color = tipo === "erro" ? "red" : "green";
-    document.body.appendChild(div);
-}
-
-if (response.ok) {
-    mostrarMensagem("Item cadastrado com sucesso!", "info");
-} else {
-    mostrarMensagem("Erro ao cadastrar item!", "erro");
-}
+let grafico;
 
 async function consultarEstatisticas() {
     const token = localStorage.getItem("token");
@@ -61,37 +42,17 @@ async function consultarEstatisticas() {
     }
 
     const data = await response.json();
-    document.getElementById("estatisticas").innerHTML =
-        `Total de Entradas: ${data.totalEntradas}<br>
-     Total de Saídas: ${data.totalSaidas}`;
-}
-
-let grafico; // variável global para armazenar o gráfico
-
-async function consultarEstatisticas() {
-    const token = localStorage.getItem("token");
-
-    const response = await fetch("/api/relatorio/estatisticas", {
-        headers: { "Authorization": "Bearer " + token }
-    });
-
-    if (!response.ok) {
-        alert("Erro ao consultar estatísticas!");
-        return;
+    const estatisticas = document.getElementById("estatisticas");
+    if (estatisticas) {
+        estatisticas.innerHTML = `Total de Entradas: ${data.totalEntradas}<br>Total de Saídas: ${data.totalSaidas}`;
     }
 
-    const data = await response.json();
+    const canvas = document.getElementById("graficoMovimentacoes");
+    if (!canvas) return;
 
-    // Atualiza texto
-    document.getElementById("estatisticas").innerHTML =
-        `Total de Entradas: ${data.totalEntradas}<br>
-     Total de Saídas: ${data.totalSaidas}`;
-
-    // Atualiza gráfico
-    const ctx = document.getElementById("graficoMovimentacoes").getContext("2d");
-
+    const ctx = canvas.getContext("2d");
     if (grafico) {
-        grafico.destroy(); // remove gráfico anterior
+        grafico.destroy();
     }
 
     grafico = new Chart(ctx, {
@@ -115,11 +76,8 @@ async function consultarEstatisticas() {
 }
 
 function handleCredentialResponse(response) {
-    // Token JWT do Google
     const googleToken = response.credential;
-
-    // Enviar para o backend para trocar por JWT interno
-    fetch("/api/externalauth/google", {
+    return fetch("/api/externalauth/google", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token: googleToken })
@@ -128,19 +86,7 @@ function handleCredentialResponse(response) {
         .then(data => {
             localStorage.setItem("token", data.jwt);
             alert("Login com Google realizado!");
-        });
+        })
+        .catch(() => alert("Falha ao autenticar com Google."));
 }
 
-function validarSenha(senha) {
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
-    return regex.test(senha);
-}
-
-document.getElementById("formCadastro").addEventListener("submit", function (event) {
-    const senha = document.getElementById("senha").value;
-
-    if (!validarSenha(senha)) {
-        event.preventDefault(); // impede envio
-        alert("A senha deve ter pelo menos uma letra maiúscula, uma minúscula, um número e no mínimo 6 caracteres.");
-    }
-});
