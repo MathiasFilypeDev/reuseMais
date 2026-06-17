@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "/nR/wUasT1U=",
+  "dgSpecHash": "HBLGp78V8QE=",
   "success": true,
   "projectFilePath": "C:\\Users\\Lenovo\\OneDrive\\Desktop\\reuseMais\\backend\\ReusePlusApi\\ReusePlusApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Lenovo\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\Lenovo\\.nuget\\packages\\microsoft.aspnetcore.authentication.google\\10.0.9\\microsoft.aspnetcore.authentication.google.10.0.9.nupkg.sha512",
     "C:\\Users\\Lenovo\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\10.0.9\\microsoft.aspnetcore.authentication.jwtbearer.10.0.9.nupkg.sha512",
     "C:\\Users\\Lenovo\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.8\\microsoft.aspnetcore.openapi.10.0.8.nupkg.sha512",
     "C:\\Users\\Lenovo\\.nuget\\packages\\microsoft.build.framework\\18.0.2\\microsoft.build.framework.18.0.2.nupkg.sha512",

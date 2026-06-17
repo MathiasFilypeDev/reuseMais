@@ -132,3 +132,4 @@ C:\Users\Lenovo\OneDrive\Desktop\reuseMais\backend\ReusePlusApi\obj\Debug\net10.
 C:\Users\Lenovo\OneDrive\Desktop\reuseMais\backend\ReusePlusApi\obj\Debug\net10.0\ReusePlusApi.pdb
 C:\Users\Lenovo\OneDrive\Desktop\reuseMais\backend\ReusePlusApi\obj\Debug\net10.0\ReusePlusApi.genruntimeconfig.cache
 C:\Users\Lenovo\OneDrive\Desktop\reuseMais\backend\ReusePlusApi\obj\Debug\net10.0\ref\ReusePlusApi.dll
+C:\Users\Lenovo\OneDrive\Desktop\reuseMais\backend\ReusePlusApi\bin\Debug\net10.0\Microsoft.AspNetCore.Authentication.Google.dll

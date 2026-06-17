@@ -1,9 +1,4 @@
-
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using ReusePlusApi.Models;
 
 namespace ReusePlusApi.Controllers
@@ -17,8 +12,8 @@ namespace ReusePlusApi.Controllers
             new User
             {
                 Id = 1,
-                Username = "admin",
-                Password = "1234",
+                Username = "Admin",
+                Password = "reusemaisadmin",
                 Role = "admin"
             }
         };
@@ -26,31 +21,24 @@ namespace ReusePlusApi.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] User login)
         {
+            if (login.Username == "Admin" && login.Password == "reusemaisadmin")
+            {
+                var token = GenerateJwtToken("Admin", "admin");
+                return Ok(new { message = "Login de administrador realizado com sucesso", token });
+            }
+
+            // Login para usuários cadastrados
             var user = Users.FirstOrDefault(u => u.Username == login.Username && u.Password == login.Password);
             if (user is null)
                 return Unauthorized(new { message = "Usuário ou senha inválidos" });
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("sua_chave_secreta_super_segura");
+            var userToken = GenerateJwtToken(user.Username, user.Role);
+            return Ok(new { message = "Login realizado com sucesso", token = userToken });
+        }
 
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Name, user.Username),
-                    new Claim(ClaimTypes.Role, user.Role)
-                }),
-                Expires = DateTime.UtcNow.AddHours(1),
-                SigningCredentials = new SigningCredentials(
-                    new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256Signature
-                )
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var jwt = tokenHandler.WriteToken(token);
-
-            return Ok(new { message = "Login realizado com sucesso", token = jwt });
+        private object GenerateJwtToken(string username, string role)
+        {
+            throw new NotImplementedException();
         }
 
         [HttpPost("register")]
@@ -64,12 +52,6 @@ namespace ReusePlusApi.Controllers
             Users.Add(newUser);
 
             return Ok(new { message = "Usuário registrado com sucesso", user = newUser });
-        }
-
-        [HttpGet("users")]
-        public ActionResult<IEnumerable<User>> GetUsers()
-        {
-            return Ok(Users);
         }
     }
 }
