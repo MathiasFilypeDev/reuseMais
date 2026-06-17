@@ -1,56 +1,34 @@
-using System.Diagnostics;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using ReusePlusApi.Data;
 using ReusePlusApi.Models;
 
 namespace ReusePlusApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
     public class CadastroController : ControllerBase
     {
-        private readonly AppDbContext _context;
-
-        public CadastroController(AppDbContext context)
+        private static readonly List<User> _users = new()
         {
-            _context = context;
-        }
+            new User { Id = 1, Username = "admin", Password = "1234", Role = "admin" }
+        };
 
         [HttpPost]
-        public IActionResult CriarUsuario([FromBody] User user)
+        public IActionResult Register([FromBody] User user)
         {
-            if (user == null || string.IsNullOrWhiteSpace(user.Senha))
-            {
-                return BadRequest("Usuário ou senha inválidos.");
-            }
+            if (_users.Any(u => u.Username == user.Username))
+                return BadRequest(new { message = "Usuário já existe" });
 
-            if (!ValidarSenha(user.Senha))
-            {
-                return BadRequest("A senha deve conter pelo menos uma letra maiúscula, uma minúscula, um número e ter no mínimo 6 caracteres.");
-            }
+            user.Id = _users.Count + 1;
+            user.Role = "user";
+            _users.Add(user);
 
-            user.Senha = BCrypt.Net.BCrypt.HashPassword(user.Senha);
-            _context.Users.Add(user);
-            _context.SaveChanges();
-            return Ok(user);
+            return Ok(new { message = "Usuário cadastrado com sucesso", user });
         }
 
-        private bool ValidarSenha(string senha)
+        [HttpGet]
+        public ActionResult<IEnumerable<User>> GetAll()
         {
-            if (string.IsNullOrWhiteSpace(senha))
-                return false;
-
-            return senha.Any(char.IsUpper)
-                && senha.Any(char.IsLower)
-                && senha.Any(char.IsDigit)
-                && senha.Length >= 6;
-        }
-
-        private string GetDebuggerDisplay()
-        {
-            return ToString();
+            return Ok(_users);
         }
     }
 }

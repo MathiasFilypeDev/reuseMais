@@ -76,10 +76,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         try {
-            const response = await apiFetch("/api/cadastro", {
+            const response = await apiFetch("/api/auth/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ Nome: nome, Email: email, Senha: senha, Tipo: tipo })
+                body: JSON.stringify({ Nome: nome, Email: email, Senha: senha })
             });
 
             if (response.ok) {

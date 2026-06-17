@@ -1,118 +1,32 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using ReusePlusApi.Constants;
-using ReusePlusApi.DTOs;
-using ReusePlusApi.Services;
+using ReusePlusApi.Models;
 
 namespace ReusePlusApi.Controllers
 {
-    /// <summary>
-    /// Controller responsável por autenticação e autorização
-    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthService _authService;
-
-        public AuthController(IAuthService authService)
+        private static readonly List<User> _users = new()
         {
-            _authService = authService;
-        }
+            new User { Id = 1, Username = "admin", Password = "1234", Role = "admin" }
+        };
 
-        /// <summary>
-        /// Realiza login de usuário ou admin
-        /// </summary>
         [HttpPost("login")]
-        [ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
+        public IActionResult Login([FromBody] User login)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            var user = _users.FirstOrDefault(u => u.Username == login.Username && u.Password == login.Password);
+            if (user is null) return Unauthorized(new { message = "Usuário ou senha inválidos" });
 
-            try
-            {
-                var result = await _authService.LoginAsync(request);
-                if (result == null)
-                    return Unauthorized(new ErrorResponseDto
-                    {
-                        Message = ErrorMessages.InvalidCredentials,
-                        ErrorCode = "INVALID_CREDENTIALS"
-                    });
-
-                return Ok(result);
-            }
-            catch
-            {
-                return Unauthorized(new ErrorResponseDto
-                {
-                    Message = ErrorMessages.InvalidCredentials,
-                    ErrorCode = "LOGIN_FAILED"
-                });
-            }
+            return Ok(new { message = "Login realizado com sucesso", user });
         }
+    }
 
-        /// <summary>
-        /// Registra um novo usuário
-        /// </summary>
-        [HttpPost("register")]
-        [ProducesResponseType(typeof(SuccessResponseDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Register([FromBody] RegisterUserRequestDto request)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            try
-            {
-                var result = await _authService.RegisterUserAsync(request);
-                return Ok(result);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(new ErrorResponseDto
-                {
-                    Message = ex.Message,
-                    ErrorCode = "REGISTRATION_FAILED"
-                });
-            }
-        }
-
-        /// <summary>
-        /// Registra um novo admin (requer chave secreta)
-        /// </summary>
-        [HttpPost("register-admin")]
-        [ProducesResponseType(typeof(SuccessResponseDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> RegisterAdmin([FromBody] RegisterAdminRequestDto request)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            try
-            {
-                var result = await _authService.RegisterAdminAsync(request);
-                return Ok(result);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return Unauthorized(new ErrorResponseDto
-                {
-                    Message = ex.Message,
-                    ErrorCode = "INVALID_SECRET_KEY"
-                });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(new ErrorResponseDto
-                {
-                    Message = ex.Message,
-                    ErrorCode = "REGISTRATION_FAILED"
-                });
-            }
-        }
+    internal class User
+    {
+        public int Id { get; internal set; }
+        public required string Username { get; internal set; }
+        public required string Password { get; internal set; }
+        public required string Role { get; internal set; }
     }
 }

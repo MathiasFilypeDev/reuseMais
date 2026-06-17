@@ -1,155 +1,62 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ReusePlusApi.Constants;
-using ReusePlusApi.DTOs;
-using ReusePlusApi.Services;
+using ReusePlusApi.Models;
 
 namespace ReusePlusApi.Controllers
 {
-    /// <summary>
-    /// Controller responsável por gerenciar itens de inventário
-    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
     public class ItemController : ControllerBase
     {
-        private readonly IItemService _itemService;
+        private static readonly List<Item> _items = new();
+        private static int _nextId = 1;
 
-        public ItemController(IItemService itemService)
-        {
-            _itemService = itemService;
-        }
-
-        /// <summary>
-        /// Obtém todos os itens
-        /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<ItemResponseDto>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllItems()
+        public ActionResult<IEnumerable<Item>> GetAll()
         {
-            try
-            {
-                var items = await _itemService.GetAllItemsAsync();
-                return Ok(items);
-            }
-            catch
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponseDto
-                {
-                    Message = ErrorMessages.InternalServerError,
-                    ErrorCode = "INTERNAL_ERROR"
-                });
-            }
+            return Ok(_items);
         }
 
-        /// <summary>
-        /// Obtém um item específico
-        /// </summary>
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(ItemResponseDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetItemById(int id)
+        public ActionResult<Item> GetById(int id)
         {
-            try
-            {
-                var item = await _itemService.GetItemByIdAsync(id);
-                return Ok(item);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new ErrorResponseDto
-                {
-                    Message = ex.Message,
-                    ErrorCode = "ITEM_NOT_FOUND"
-                });
-            }
+            var item = _items.FirstOrDefault(i => i.Id == id);
+            if (item is null) return NotFound();
+            return Ok(item);
         }
 
-        /// <summary>
-        /// Cria um novo item
-        /// </summary>
         [HttpPost]
-        [ProducesResponseType(typeof(ItemResponseDto), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateItem([FromBody] CreateItemRequestDto request)
+        public ActionResult<Item> Create(Item item)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            item.Id = _nextId++;
+            item.DataCadastro = DateTime.UtcNow;
+            _items.Add(item);
 
-            try
-            {
-                var item = await _itemService.CreateItemAsync(request);
-                return CreatedAtAction(nameof(GetItemById), new { id = item.Id }, item);
-            }
-            catch
-            {
-                return BadRequest(new ErrorResponseDto
-                {
-                    Message = ErrorMessages.BadRequest,
-                    ErrorCode = "ITEM_CREATION_FAILED"
-                });
-            }
+            return CreatedAtAction(nameof(GetById), new { id = item.Id }, item);
         }
 
-        /// <summary>
-        /// Atualiza um item
-        /// </summary>
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(ItemResponseDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateItem(int id, [FromBody] UpdateItemRequestDto request)
+        public IActionResult Update(int id, Item item)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            var existing = _items.FirstOrDefault(i => i.Id == id);
+            if (existing is null) return NotFound();
 
-            request.Id = id;
+            existing.Nome = item.Nome;
+            existing.Quantidade = item.Quantidade;
+            existing.Valor = item.Valor;
+            existing.Descricao = item.Descricao;
+            existing.DataAtualizacao = DateTime.UtcNow;
 
-            try
-            {
-                var item = await _itemService.UpdateItemAsync(request);
-                return Ok(item);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new ErrorResponseDto
-                {
-                    Message = ex.Message,
-                    ErrorCode = "ITEM_NOT_FOUND"
-                });
-            }
+            return Ok(existing);
         }
 
-        /// <summary>
-        /// Deleta um item
-        /// </summary>
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteItem(int id)
+        public IActionResult Delete(int id)
         {
-            try
-            {
-                var success = await _itemService.DeleteItemAsync(id);
-                if (!success)
-                    return NotFound(new ErrorResponseDto
-                    {
-                        Message = ErrorMessages.NotFound,
-                        ErrorCode = "ITEM_NOT_FOUND"
-                    });
+            var item = _items.FirstOrDefault(i => i.Id == id);
+            if (item is null) return NotFound();
 
-                return NoContent();
-            }
-            catch
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponseDto
-                {
-                    Message = ErrorMessages.InternalServerError,
-                    ErrorCode = "INTERNAL_ERROR"
-                });
-            }
+            _items.Remove(item);
+            return NoContent();
         }
     }
 }
