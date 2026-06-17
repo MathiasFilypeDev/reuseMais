@@ -1,34 +1,71 @@
-﻿document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("formItens");
+﻿function verificarLogin() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        alert("Você precisa estar logado!");
+        window.location.href = "login.html";
+    }
+}
 
-    form.addEventListener("submit", (event) => {
-        event.preventDefault();
+document.getElementById("formItem").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-        const novoItem = {
-            titulo: form.categoria.value + " - Item novo",
-            descricao: form.descricao.value,
-            categoria: form.categoria.value,
-            disponibilidade: "Imediata",
-            prazo: form.prazo.value + " dias",
-            localizacao: form.local.value,
-            quantidade: form.quantidade.value,
-            valor: form.valor.value,
-            status: "Sem propostas",
-            imagem: "assets/default.png" 
-        };
+    const nome = document.getElementById("nome").value;
+    const descricao = document.getElementById("descricao").value;
+    const quantidade = document.getElementById("quantidade").value;
 
-        let itens = JSON.parse(localStorage.getItem("itens")) || [];
+    const token = localStorage.getItem("token");
 
-        itens.push(novoItem);
-
-        localStorage.setItem("itens", JSON.stringify(itens));
-
-        alert("Item cadastrado com sucesso!");
-        form.reset();
+    const response = await fetch("/api/item", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify({ nome, descricao, quantidade })
     });
+
+    if (response.ok) {
+        const data = await response.json();
+        alert("Item cadastrado com sucesso!");
+        carregarItens();
+        document.getElementById("formItem").reset();
+    } else {
+        alert("Erro ao cadastrar item. Verifique se você tem permissão.");
+    }
 });
 
-const btnAddItem = document.getElementById("btn-add-item");
-btnAddItem.addEventListener("click", () => {
-    window.location.href = "principal.html";    
-});
+async function carregarItens() {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch("/api/item", {
+        headers: { "Authorization": "Bearer " + token }
+    });
+
+    if (!response.ok) {
+        alert("Erro ao carregar itens.");
+        return;
+    }
+
+    const data = await response.json();
+    const tbody = document.querySelector("#tabelaItens tbody");
+    tbody.innerHTML = "";
+
+    data.forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+      <td>${item.id}</td>
+      <td>${item.nome}</td>
+      <td>${item.descricao}</td>
+      <td>${item.quantidade}</td>
+    `;
+        tbody.appendChild(row);
+    });
+}
+
+function logout() {
+    localStorage.removeItem("token");
+    window.location.href = "login.html";
+}
+
+// Carregar itens ao abrir a página
+window.onload = carregarItens;

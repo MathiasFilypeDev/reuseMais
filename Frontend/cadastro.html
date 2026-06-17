@@ -1,140 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro - Reuse+</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Cadastro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="assets/faveicon-reuseMais.png" type="image/x-icon">
+    <script src="Js/cadastro.js" defer></script>
 </head>
 
-<body class="bg-black text-white">
+<body id="bodyPrincipal">
 
-    <div class="navbar navbar-expand-lg justify-content-center navbar-dark bg-dark" id="navBar-cadastro">
-        <button class="btn btn-outline-success m-1" href="index.html" id="btn-home">Home</button>
-        <button class="btn btn-outline-light m-1" href="principal.html" id="btn-principal">Principal</button>
-        <button class="btn btn-outline-info m-1" href="about.html" id="btn-sobre">Sobre</button>
-    </div>
-    <main>
-
-        <div class="container auth-page d-flex align-items-center justify-content-center mt-2">
-            <div class="auth-card p-3 rounded-4" style="max-width: 520px; max-height: 50%;">
-                <div class="text-center mb-4">
-                    <img src="assets/logo-reuseMais.png" alt="Reuse+" class="login-logo mb-3" style="max-width: 90px;">
-                    <h2 class="auth-title mb-2">Cadastro</h2>
-                    <p class="auth-subtitle text-muted mb-0">Crie sua conta para começar a reutilizar itens de forma
-                        responsável.</p>
-                </div>
-                <form id="formCadastro" class="auth-form">
-                    <div class="mb-3">
-                        <label class="form-label font-weight-bold">Usuário</label>
-                        <input type="text" id="cadUser" class="form-control" placeholder="Crie seu usuário"
-                            title="Digite seu usuário" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label font-weight-bold">Email</label>
-                        <input type="email" id="cadEmail" class="form-control" placeholder="Digite seu email"
-                            title="Digite seu email" required>
-                        <small id="emailError" class="text-danger mt-1" style="display:none;">
-                            O email deve ser o exemplo nome@example.com
-                        </small>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label font-weight-bold">Senha</label>
-                        <input type="password" id="cadSenha" class="form-control" placeholder="Digite sua senha"
-                            title="Digite sua senha" required>
-                        <small id="senhaError" class="text-danger mt-1" style="display:none;">
-                            A senha deve conter pelo menos 6 caracteres, incluindo uma leta maiúscula, uma minúscula e
-                            um número.
-                        </small>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label font-weight-bold">Confirme sua senha</label>
-                        <input type="password" id="cadConfirmaSenha" class="form-control"
-                            placeholder="Confirme sua senha" title="Digite sua senha" required>
-                        <small id="confirmaSenhaError" class="text-danger mt-1" style="display:none;">
-                            As senhas devem ser iguais.
-                        </small>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
-                    <p class="text-center mt-3 text-muted mb-1">Já possui uma conta?</p>
-                    <a href="login.html" class="d-block text-center text-info fs-6">Entrar</a>
-                </form>
-                <div id="msgCadastro" class="mt-3"></div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Reuse+</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+                </ul>
             </div>
         </div>
+    </nav>
+
+    <main class="container page-content mt-5">
+        <h1 class="text-center mb-4">Cadastro de Usuário</h1>
+        <form id="formCadastro" class="card p-4 mx-auto" style="max-width:400px;">
+
+            <div class="mb-3">
+                <label for="username" class="form-label">Usuário</label>
+                <input type="text" id="username" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">E-mail</label>
+                <input type="email" id="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Senha</label>
+                <input type="password" id="password" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Repetir Senha</label>
+                <input type="password" id="confirmPassword" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
+        </form>
+        <p class="text-center mt-3">Já possui conta? <a href="login.html">Faça login</a></p>
     </main>
 
-    <footer class="footer text-center mb-1 fs-5">
-        <small>© <span id="currentYear"></span> Reuse+. Todos os direitos reservados.</small>
+    <footer class="footer text-center">
+        © Reuse+. Todos os direitos reservados.
     </footer>
 
-    <script src="Js/app.js"></script>
-    <script src="Js/cadastro.js"></script>
-
-    <!-- Script de validação em tempo real -->
-    <script>
-        function validarEmail(email) {
-            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return regex.test(email);
-        }
-
-        function validarSenha(senha) {
-            // Primeiro verifica o tamanho mínimo
-            if (senha.length < 6) {
-                return false;
-            }
-            // Depois verifica se contém pelo menos uma maiúscula, uma minúscula e um número
-            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
-            return regex.test(senha);
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const emailInput = document.getElementById("cadEmail");
-            const senhaInput = document.getElementById("cadSenha");
-            const confirmaSenhaInput = document.getElementById("cadConfirmaSenha");
-
-            const emailError = document.getElementById("emailError");
-            const senhaError = document.getElementById("senhaError");
-            const confirmaSenhaError = document.getElementById("confirmaSenhaError");
-
-            // Email
-            emailInput.addEventListener("input", () => {
-                emailError.style.display = validarEmail(emailInput.value) ? "none" : "block";
-            });
-            emailInput.addEventListener("blur", () => emailError.style.display = "none");
-            emailInput.addEventListener("focus", () => {
-                if (!validarEmail(emailInput.value)) emailError.style.display = "block";
-            });
-
-            // Senha
-            senhaInput.addEventListener("input", () => {
-                senhaError.style.display = validarSenha(senhaInput.value) ? "none" : "block";
-            });
-            senhaInput.addEventListener("blur", () => senhaError.style.display = "none");
-            senhaInput.addEventListener("focus", () => {
-                if (!validarSenha(senhaInput.value)) senhaError.style.display = "block";
-            });
-
-            // Confirmação de senha
-            confirmaSenhaInput.addEventListener("input", () => {
-                confirmaSenhaError.style.display = (confirmaSenhaInput.value !== senhaInput.value) ? "block" : "none";
-            });
-            confirmaSenhaInput.addEventListener("blur", () => confirmaSenhaError.style.display = "none");
-            confirmaSenhaInput.addEventListener("focus", () => {
-                if (confirmaSenhaInput.value !== senhaInput.value) confirmaSenhaError.style.display = "block";
-            });
-
-            // Impede envio se inválido
-            document.getElementById("formCadastro").addEventListener("submit", (event) => {
-                if (!validarEmail(emailInput.value) || !validarSenha(senhaInput.value) || confirmaSenhaInput.value !== senhaInput.value) {
-                    event.preventDefault();
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>

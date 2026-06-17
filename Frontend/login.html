@@ -1,75 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="assets/faveicon-reuseMais.png" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <title>Login - Reuse +</title>
+    <script src="Js/login.js" defer></script>
 </head>
 
-<body class="bg-dark">
+<body id="bodyPrincipal">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Reuse+</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="cadastro.html">Cadastro</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-    <div class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-center mb-4" id="navBar-home">
-        <a class="btn btn-outline-success mx-5" href="index.html" id="btn-home">Home</a>
-        <a class="btn btn-outline-light mx-5" href="principal.html" id="btn-principal">Principal</a>
-        <a class="btn btn-outline-info mx-5" href="about.html" id="btn-sobre">Sobre</a>
-    </div>
-
-    <div class="container rounded-5 d-flex align-items-center justify-content-center mb-4" style="max-width: 440px;">
-        <div class="login-card p-5 rounded-4 w-100">
-            <div class="text-center mb-4">
-                <img src="assets/logo-reuseMais.png" alt="Reuse+" class="login-logo mb-3" style="max-width: 90px;">
-                <h2 class="login-title mb-2">Login</h2>
+    
+    <main class="container page-content mt-5">
+        <div id="msgArea" class="mb-3"></div>
+        <h1 class="text-center mb-4">Login</h1>
+        <form id="formLogin" class="card p-4 mx-auto" style="max-width:400px;">
+            <!-- Conteúdo principal -->
+            <label class="form-label m-auto mb-3 bg-success rounded-3 p-1 fs-6">Tipo de Usuário</label>
+            <div class="d-flex gap-3 m-auto">
+                <div class="form-check form-check-inline">
+                    <label for="rangeUsuario" class="form-label btn btn-outline-primary m-auto">Usuário</label>
+                    <input type="radio" id="rangeUsuario" name="tipoUsuario" value="usuario" class="form-check-input" checked>
+                </div>
+                <div class="form-check form-check-inline ">
+                    <label for="rangeAdmin" class="form-label btn btn-outline-primary">Admin</label>
+                    <input type="radio" id="rangeAdmin" name="tipoUsuario" value="admin" class="form-check-input">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="username" class="form-label">Usuário</label>
+                <input type="text" id="username" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Senha</label>
+                <input type="password" id="password" class="form-control" required>
             </div>
 
-            <form id="formLogin" class="login-form">
-                <!-- Escolha do tipo de conta -->
-                <div class="mb-3 text-center">
-                    <label class="form-label text-white">Escolha o tipo de conta:</label>
-                    <div>
-                        <input type="radio" id="tipoUser" name="tipo" value="usuario" checked>
-                        <label for="tipoUser" class="text-white mx-2">Usuário</label>
+            <!-- Range para escolher tipo de usuário -->
+            <div class="mb-3">
+            </div>
 
-                        <input type="radio" id="tipoAdmin" name="tipo" value="admin">
-                        <label for="tipoAdmin" class="text-white mx-2">Admin</label>
-                    </div>
-                </div>
+            <button type="submit" class="btn btn-success w-100">Entrar</button>
+        </form>
+        <p class="text-center mt-3">Não possui conta? <a href="cadastro.html">Cadastre-se</a></p>
+    </main>
 
-                <div class="mb-3">
-                    <label class="form-label font-weight-bold">Email/Usuário</label>
-                    <input type="text" id="loginUser" class="form-control" placeholder="Digite seu usuário" required>
-                    <small id="emailError" class="text-danger mt-1" style="display:none;"></small>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label font-weight-bold">Senha</label>
-                    <input type="password" id="loginPass" class="form-control" placeholder="Digite sua senha" required>
-                    <small id="senhaError" class="text-danger mt-1" style="display:none;"></small>
-                </div>
-
-                <button id="btnLogin" type="submit" class="btn btn-primary w-100">Entrar</button>
-                <p class="text-center text-white mb-1">Ainda não tem conta?</p>
-                <a href="cadastro.html" class="d-block text-center text-info fs-6">Cadastre-se</a>
-            </form>
-
-            <!-- Mensagem de erro -->
-            <div class="alert alert-danger mt-3 d-none" id="loginError"></div>
-
-            <div class="g_id_signin mt-3" data-type="standard"></div>
-            <div id="msgCadastro" class="mt-3"></div>
-        </div>
-    </div>
-
-    <footer class="footer text-center mb-1 fs-5">
-        <small>© <span id="currentYear"></span> Reuse+. Todos os direitos reservados.</small>
+    <!-- Rodapé -->
+    <footer class="footer text-center">
+        © Reuse+. Todos os direitos reservados.
     </footer>
-
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="Js/app.js"></script>
-    <script src="Js/login.js"></script>
 </body>
 
 </html>

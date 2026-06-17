@@ -1,3 +1,11 @@
+function verificarLogin() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        alert("Você precisa estar logado!");
+        window.location.href = "login.html";
+    }
+}
+
 async function consultarRelatorio(tipo) {
     const token = localStorage.getItem("token");
 
@@ -12,17 +20,16 @@ async function consultarRelatorio(tipo) {
 
     const data = await response.json();
     const tbody = document.querySelector("#tabelaRelatorio tbody");
-    if (!tbody) return;
     tbody.innerHTML = "";
 
     data.forEach(mov => {
         const row = document.createElement("tr");
         row.innerHTML = `
-            <td>${mov.id}</td>
-            <td>${mov.tipo}</td>
-            <td>${mov.itemId}</td>
-            <td>${mov.quantidade}</td>
-        `;
+      <td>${mov.id}</td>
+      <td>${mov.tipo}</td>
+      <td>${mov.itemId}</td>
+      <td>${mov.quantidade}</td>
+    `;
         tbody.appendChild(row);
     });
 }
@@ -43,17 +50,10 @@ async function consultarEstatisticas() {
 
     const data = await response.json();
     const estatisticas = document.getElementById("estatisticas");
-    if (estatisticas) {
-        estatisticas.innerHTML = `Total de Entradas: ${data.totalEntradas}<br>Total de Saídas: ${data.totalSaidas}`;
-    }
+    estatisticas.innerHTML = `Total de Entradas: ${data.totalEntradas}<br>Total de Saídas: ${data.totalSaidas}`;
 
-    const canvas = document.getElementById("graficoMovimentacoes");
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    if (grafico) {
-        grafico.destroy();
-    }
+    const ctx = document.getElementById("graficoMovimentacoes").getContext("2d");
+    if (grafico) grafico.destroy();
 
     grafico = new Chart(ctx, {
         type: "bar",
@@ -75,25 +75,7 @@ async function consultarEstatisticas() {
     });
 }
 
-function handleCredentialResponse(response) {
-    const googleToken = response.credential;
-    return fetch("/api/externalauth/google", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: googleToken })
-    })
-        .then(res => res.json())
-        .then(data => {
-            localStorage.setItem("token", data.jwt);
-            alert("Login com Google realizado!");
-        })
-        .catch(() => alert("Falha ao autenticar com Google."));
-}
-
-function verificarLogin() {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user) {
-        alert("Você precisa estar logado!");
-        window.location.href = "login.html";
-    }
+function logout() {
+    localStorage.removeItem("token");
+    window.location.href = "login.html";
 }
