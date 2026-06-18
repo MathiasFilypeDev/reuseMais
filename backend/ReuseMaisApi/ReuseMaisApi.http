@@ -1,0 +1,6 @@
+@ReuseMaisApi_HostAddress = http://localhost:5069
+
+GET {{ReuseMaisApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
