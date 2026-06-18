@@ -17,15 +17,19 @@ document.getElementById("formLogin").addEventListener("submit", async (e) => {
     btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Entrando...`;
 
     try {
-        // Ajuste a porta conforme seu backend ASP.NET Core
         const response = await fetch("http://localhost:5000/api/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, password, role })
         });
 
+        console.log("Status da resposta:", response.status);
+        console.log("Headers:", response.headers);
+
         if (response.ok) {
             const data = await response.json();
+            console.log("Token recebido:", data.token ? "✅ Sim" : "❌ Não");
+
             localStorage.setItem("token", data.token);
 
             if (role === "admin") {
@@ -34,10 +38,20 @@ document.getElementById("formLogin").addEventListener("submit", async (e) => {
                 window.location.href = "principal.html";
             }
         } else {
-            showMessage("Usuário ou senha inválidos.", "danger");
+            // ✅ MELHORADO: Mostrar erro detalhado do servidor
+            let errorMessage = "Usuário ou senha inválidos.";
+            try {
+                const errorData = await response.json();
+                errorMessage = errorData.message || errorMessage;
+                console.error("Erro do servidor:", errorData);
+            } catch {
+                console.error("Status de erro:", response.status);
+            }
+            showMessage(errorMessage, "danger");
         }
     } catch (error) {
-        showMessage("Erro de conexão com o servidor.", "danger");
+        console.error("Erro de conexão completo:", error);
+        showMessage(`Erro de conexão com o servidor: ${error.message}`, "danger");
     } finally {
         btn.disabled = false;
         btn.innerHTML = "Entrar";
