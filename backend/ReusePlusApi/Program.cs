@@ -1,15 +1,29 @@
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
+using ReusePlusApi;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<ReusePlusContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var jwtKey = builder.Configuration["Jwt:Key"];
 if (string.IsNullOrEmpty(jwtKey))
 {
-    throw new Exception("Chave JWT não encontrada. Configure Jwt:Key no appsettings.json ou como variável de ambiente.");
+    throw new Exception("Chave JWT não encontrada no appsettings.json");
 }
-
 var key = Encoding.ASCII.GetBytes(jwtKey);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
 
 builder.Services.AddAuthentication(options =>
 {
@@ -28,33 +42,33 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(key),
         ClockSkew = TimeSpan.Zero
     };
-})
-.AddGoogle(options =>
+}).AddGoogle(options =>
 {
-    options.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? throw new Exception("Google ClientId não configurado");
-    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? throw new Exception("Google ClientSecret não configurado");
+    options.ClientId = builder.Configuration["Authentication:Google:ClientId"]
+        ?? throw new Exception("Google ClientId não configurado");
+    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]
+        ?? throw new Exception("Google ClientSecret não configurado");
 });
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 
-// ADICIONAR ISSO:
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader();
-    });
-});
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// E USAR ISSO:
-app.UseCors("AllowAll");  // ← IMPORTANTE: ANTES de MapControllers!
+app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 app.MapControllers();
+
 app.Run();
