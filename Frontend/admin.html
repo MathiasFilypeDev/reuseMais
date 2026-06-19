@@ -49,5 +49,32 @@
         © Reuse+. Todos os direitos reservados.
     </footer>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js">
+    // Função auxiliar para fazer requisições com token
+    async function fetchComToken(url, options = {}) {
+        const token = localStorage.getItem("token");
+
+        const headers = {
+            "Content-Type": "application/json",
+            ...options.headers
+        };
+
+        if (token) {
+            headers["Authorization"] = `Bearer ${token}`;
+        }
+
+        return fetch(url, {
+            ...options,
+            headers
+        });
+    }
+
+    // Exemplo de uso:
+    async function carregarUsuarios() {
+        const response = await fetchComToken("http://localhost:5069/api/users");
+        const data = await response.json();
+        console.log(data);
+    }
+</script>
 
 </html>

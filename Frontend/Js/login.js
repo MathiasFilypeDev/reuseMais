@@ -15,24 +15,39 @@ document.getElementById("formLogin").addEventListener("submit", async (e) => {
     btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Entrando...`;
 
     try {
-        const response = await fetch("http://localhost:5000/api/auth/login", {
+        const response = await fetch("http://localhost:5069/api/users/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password, role })
+            body: JSON.stringify({ username, password })
         });
 
-        if (response.ok) {
-            const data = await response.json();
-            localStorage.setItem("token", data.token);
+        if (!response.ok) {
+            const error = await response.json();
+            showMessage(error.message || "Usuário ou senha inválidos.", "danger");
+            return;
+        }
 
+        const data = await response.json();
+
+        // ✅ Salvar o JWT Token
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify({
+            id: data.id,
+            nome: data.nome,
+            email: data.email
+        }));
+        localStorage.setItem("role", role);
+
+        showMessage("Login realizado com sucesso!", "success");
+
+        setTimeout(() => {
             if (role === "admin") {
                 window.location.href = "admin.html";
             } else {
                 window.location.href = "principal.html";
             }
-        } else {
-            showMessage("Usuário ou senha inválidos.", "danger");
-        }
+        }, 1000);
+
     } catch (error) {
         showMessage("Erro de conexão com o servidor.", "danger");
         console.error(error);
