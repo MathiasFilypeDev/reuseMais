@@ -52,6 +52,18 @@
     <footer class="footer text-center">
         © Reuse+. Todos os direitos reservados.
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+        const token = localStorage.getItem("token");
+
+            // Para requisições autenticadas:
+            fetch("http://localhost:5069/api/profile/me", {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+    </script>
+
 </body>
 
 </html>

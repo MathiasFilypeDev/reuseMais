@@ -1,95 +1,114 @@
+// ✅ Verificar se é admin
 function verificarLogin() {
-    const token = localStorage.getItem("token");
-    const role = localStorage.getItem("role");
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-    if (!token) {
-        alert("Você precisa estar logado!");
+    if (user.role !== "admin") {
+        alert("Acesso negado!");
         window.location.href = "login.html";
-    } else if (role !== "admin") {
-        alert("Acesso restrito a administradores!");
-        window.location.href = "principal.html";
+    }
+
+    carregarProdutos();
+}
+
+// ✅ Função auxiliar para requisições com token
+async function fetchComToken(url, options = {}) {
+    const token = localStorage.getItem("token");
+
+    const headers = {
+        "Content-Type": "application/json",
+        ...options.headers
+    };
+
+    if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+    }
+
+    return fetch(url, {
+        ...options,
+        headers
+    });
+}
+
+// ✅ CARREGAR PRODUTOS
+async function carregarProdutos() {
+    try {
+        const response = await fetchComToken("http://localhost:5069/api/produtos");
+
+        if (!response.ok) throw new Error("Erro ao carregar produtos");
+
+        const produtos = await response.json();
+        exibirProdutosNaTabela(produtos);
+    } catch (error) {
+        console.error("Erro:", error);
+        showMessage("Erro ao carregar produtos", "danger");
     }
 }
 
-async function consultarRelatorio(tipo) {
-    const token = localStorage.getItem("token");
-
-    const response = await fetch("http://localhost:5069/api/movimentacoes", {
-        headers: { "Authorization": "Bearer " + token }
-    });
-
-    if (!response.ok) {
-        alert("Acesso negado. Apenas admin pode ver relatórios.");
-        return;
-    }
-
-    const data = await response.json();
-    const tbody = document.querySelector("#tabelaRelatorio tbody");
+// ✅ EXIBIR PRODUTOS
+function exibirProdutosNaTabela(produtos) {
+    const tbody = document.querySelector("#tabelaProdutos tbody");
     tbody.innerHTML = "";
 
-    // filtramos por tipo (entrada/saida) se existir
-    const filtrados = data.filter(mov => mov.tipo === tipo);
-
-    filtrados.forEach(mov => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${mov.id}</td>
-            <td>${mov.tipo || "N/A"}</td>
-            <td>${mov.itemId}</td>
-            <td>${mov.quantidade || 1}</td>
-        `;
-        tbody.appendChild(row);
-    });
-}
-
-let grafico;
-
-async function consultarEstatisticas() {
-    const token = localStorage.getItem("token");
-
-    const response = await fetch("http://localhost:5069/api/movimentacoes", {
-        headers: { "Authorization": "Bearer " + token }
-    });
-
-    if (!response.ok) {
-        alert("Erro ao consultar estatísticas!");
+    if (produtos.length === 0) {
+        tbody.innerHTML = "<tr><td colspan='7' class='text-center'>Nenhum produto encontrado</td></tr>";
         return;
     }
 
-    const data = await response.json();
-
-    // contamos entradas e saídas
-    const totalEntradas = data.filter(m => m.tipo === "entrada").length;
-    const totalSaidas = data.filter(m => m.tipo === "saida").length;
-
-    const estatisticas = document.getElementById("estatisticas");
-    estatisticas.innerHTML = `Total de Entradas: ${totalEntradas}<br>Total de Saídas: ${totalSaidas}`;
-
-    const ctx = document.getElementById("graficoMovimentacoes").getContext("2d");
-    if (grafico) grafico.destroy();
-
-    grafico = new Chart(ctx, {
-        type: "bar",
-        data: {
-            labels: ["Entradas", "Saídas"],
-            datasets: [{
-                label: "Quantidade",
-                data: [totalEntradas, totalSaidas],
-                backgroundColor: ["green", "red"]
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: false },
-                title: { display: true, text: "Estatísticas de Movimentações" }
-            }
-        }
+    produtos.forEach(produto => {
+        const data = new Date(produto.dataCriacao).toLocaleDateString("pt-BR");
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${produto.id}</td>
+            <td>${produto.nome}</td>
+            <td>${produto.categoria}</td>
+            <td>${produto.quantidade}</td>
+            <td><strong>${produto.criadoPorNome}</strong></td>
+            <td>${data}</td>
+            <td>
+                <button class="btn btn-sm btn-danger" onclick="deletarProduto(${produto.id})">🗑️ Deletar</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
     });
 }
 
+// ✅ DELETAR PRODUTO
+async function deletarProduto(id) {
+    if (!confirm("Tem certeza que deseja deletar este produto?")) return;
+
+    try {
+        const response = await fetchComToken(`http://localhost:5069/api/produtos/${id}`, {
+            method: "DELETE"
+        });
+
+        if (!response.ok) throw new Error("Erro ao deletar produto");
+
+        showMessage("Produto deletado!", "success");
+        carregarProdutos();
+    } catch (error) {
+        showMessage("Erro ao deletar produto", "danger");
+    }
+}
+
+// ✅ LOGOUT
 function logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.clear();
     window.location.href = "login.html";
+}
+
+// ✅ MENSAGENS
+function showMessage(message, type) {
+    const container = document.createElement("div");
+    container.className = `alert alert-${type} text-center`;
+    container.textContent = message;
+
+    const alertContainer = document.createElement("div");
+    alertContainer.style.position = "fixed";
+    alertContainer.style.top = "80px";
+    alertContainer.style.right = "20px";
+    alertContainer.style.zIndex = "1000";
+    alertContainer.appendChild(container);
+    document.body.appendChild(alertContainer);
+
+    setTimeout(() => alertContainer.remove(), 3000);
 }

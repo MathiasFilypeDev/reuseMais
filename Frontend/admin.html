@@ -23,27 +23,80 @@
 
     <main class="container page-content mt-5">
         <h1 class="text-center mb-4">Painel do Administrador</h1>
-        <button class="btn btn-success me-2" onclick="consultarRelatorio('entrada')">Consultar Entradas</button>
-        <button class="btn btn-danger me-2" onclick="consultarRelatorio('saida')">Consultar Saídas</button>
-        <button class="btn btn-info" onclick="consultarEstatisticas()">Consultar Estatísticas</button>
-
-        <h2 class="mt-4">Relatório</h2>
-        <table id="tabelaRelatorio" class="table table-dark table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Tipo</th>
-                    <th>Item</th>
-                    <th>Quantidade</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-
-        <h2 class="mt-4">Estatísticas</h2>
-        <div id="estatisticas" class="mb-3"></div>
-        <canvas id="graficoMovimentacoes" width="400" height="200"></canvas>
+    
+        <!-- ✅ VISUALIZAR E GERENCIAR PRODUTOS -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h2>📦 Produtos do Sistema</h2>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    Você pode visualizar todos os produtos e deletar se necessário.
+                    Os usuários são os responsáveis por criar e editar seus produtos.
+                </div>
+    
+                <table id="tabelaProdutos" class="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Categoria</th>
+                            <th>Quantidade</th>
+                            <th>Criado por</th>
+                            <th>Data</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
     </main>
+
+    <div class="modal fade" id="modalProduto" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitulo">Novo Produto</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formProduto">
+                        <div class="mb-3">
+                            <label for="nomeProduto" class="form-label">Nome:</label>
+                            <input type="text" id="nomeProduto" class="form-control" required>
+                        </div>
+    
+                        <div class="mb-3">
+                            <label for="categoriaProduto" class="form-label">Categoria:</label>
+                            <select id="categoriaProduto" class="form-control" required>
+                                <option value="">Selecione uma categoria</option>
+                                <option value="Roupas">Roupas</option>
+                                <option value="Eletrônicos">Eletrônicos</option>
+                                <option value="Móveis">Móveis</option>
+                                <option value="Livros">Livros</option>
+                                <option value="Utensílios">Utensílios</option>
+                            </select>
+                        </div>
+    
+                        <div class="mb-3">
+                            <label for="quantidadeProduto" class="form-label">Quantidade:</label>
+                            <input type="number" id="quantidadeProduto" class="form-control" min="0" required>
+                        </div>
+    
+                        <div class="mb-3">
+                            <label for="descricaoProduto" class="form-label">Descrição:</label>
+                            <textarea id="descricaoProduto" class="form-control" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="salvarProduto()">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <footer class="footer text-center">
         © Reuse+. Todos os direitos reservados.
