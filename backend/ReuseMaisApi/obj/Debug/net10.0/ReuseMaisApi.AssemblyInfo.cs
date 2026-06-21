@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ReuseMaisApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0b48856772811576d1246aa2a35710efedcd42a7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+48f870e8a702312d28f1eb63447ece14439306cc")]
 [assembly: System.Reflection.AssemblyProductAttribute("ReuseMaisApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ReuseMaisApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
