@@ -9,7 +9,7 @@ namespace ReuseMaisApi.Services
     {
         private readonly string _jwtSecret = "sua-chave-super-secreta-com-mais-de-32-caracteres-aqui!";
 
-        public string GenerateToken(int userId, string nome, string email)
+        public string GenerateToken(int userId, string nome, string email, string role)
         {
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtSecret));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

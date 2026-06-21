@@ -10,10 +10,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("f0c5802e-f408-4524-badf-b050c931f3ca")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("ReuseMaisApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+20ea82e26e8a12b0ef2e1c81da3923003d9b1c51")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0b48856772811576d1246aa2a35710efedcd42a7")]
 [assembly: System.Reflection.AssemblyProductAttribute("ReuseMaisApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ReuseMaisApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
