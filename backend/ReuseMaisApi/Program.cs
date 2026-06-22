@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;  // ✅ ADICIONE ISTO
 using Microsoft.IdentityModel.Tokens;
+using ReuseMaisApi.Controllers;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -99,4 +100,5 @@ app.Run();
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
+    public object? Users { get; internal set; }
 }

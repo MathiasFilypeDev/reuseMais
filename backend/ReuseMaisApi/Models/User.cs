@@ -7,5 +7,7 @@ namespace ReuseMaisApi.Models
         public string? Email { get; set; }    
         public string? Senha { get; set; }
         public string? Role { get; internal set; }
+        public string? PasswordHash { get; internal set; }
+        public object? Username { get; internal set; }
     }
 }
