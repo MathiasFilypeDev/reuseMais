@@ -1,12 +1,19 @@
 function verificarLogin() {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user) {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const token = localStorage.getItem("token");
+
+    if (!user.id || !token) {
         alert("Você precisa estar logado!");
         window.location.href = "login.html";
+        return;
+    }
+
+    if (user.role === "admin") {
+        // Admin deve ir para admin.html
+        window.location.href = "admin.html";
     }
 }
 
-// Chamamos a verificação logo ao carregar a página
 window.onload = () => {
     verificarLogin();
     carregarUsuarios();
@@ -16,8 +23,15 @@ window.onload = () => {
 
 const API_URL = "http://localhost:5069/api";
 
+async function fetchComToken(endpoint) {
+    const token = localStorage.getItem("token");
+    return fetch(`${API_URL}${endpoint}`, {
+        headers: { "Authorization": `Bearer ${token}` }
+    });
+}
+
 async function carregarUsuarios() {
-    const res = await fetch(`${API_URL}/users`);
+    const res = await fetchComToken("/users");
     const data = await res.json();
     const lista = document.getElementById("listaUsuarios");
     lista.innerHTML = "";
@@ -29,7 +43,7 @@ async function carregarUsuarios() {
 }
 
 async function carregarItens() {
-    const res = await fetch(`${API_URL}/items`);
+    const res = await fetchComToken("/items");
     const data = await res.json();
     const lista = document.getElementById("listaItens");
     lista.innerHTML = "";
@@ -41,7 +55,7 @@ async function carregarItens() {
 }
 
 async function carregarMovimentacoes() {
-    const res = await fetch(`${API_URL}/movimentacoes`);
+    const res = await fetchComToken("/movimentacoes");
     const data = await res.json();
     const lista = document.getElementById("listaMovimentacoes");
     lista.innerHTML = "";

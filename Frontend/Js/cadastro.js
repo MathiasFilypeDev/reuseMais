@@ -1,3 +1,4 @@
+document.getElementById('anoAtual').textContent = new Date().getFullYear();
 document.getElementById("formRegistro").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -6,23 +7,18 @@ document.getElementById("formRegistro").addEventListener("submit", async (e) => 
     const senha = document.getElementById("senha").value;
     const confirmarSenha = document.getElementById("confirmarSenha").value;
 
-    // Validações
     if (!nome || !email || !senha || !confirmarSenha) {
-        showMessage("Preencha todos os campos!", "warning");
-        return;
+        return showMessage("Preencha todos os campos!", "warning");
     }
-
     if (senha !== confirmarSenha) {
-        showMessage("As senhas não coincidem!", "danger");
-        return;
+        return showMessage("As senhas não coincidem!", "danger");
     }
-
     if (senha.length < 6) {
-        showMessage("Senha deve ter pelo menos 6 caracteres!", "warning");
-        return;
+        return showMessage("Senha deve ter pelo menos 6 caracteres!", "warning");
     }
 
     const btn = e.target.querySelector("button[type='submit']");
+    const originalText = btn.innerHTML;
     btn.disabled = true;
     btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Cadastrando...`;
 
@@ -36,8 +32,7 @@ document.getElementById("formRegistro").addEventListener("submit", async (e) => 
         const data = await response.json();
 
         if (!response.ok) {
-            showMessage(data.message || "Erro ao cadastrar", "danger");
-            return;
+            return showMessage(data.message || "Erro ao cadastrar", "danger");
         }
 
         showMessage("Cadastro realizado com sucesso! Redirecionando...", "success");
@@ -47,11 +42,11 @@ document.getElementById("formRegistro").addEventListener("submit", async (e) => 
         }, 2000);
 
     } catch (error) {
-        showMessage("Erro de conexão com o servidor.", "danger");
         console.error(error);
+        showMessage("Erro de conexão com o servidor.", "danger");
     } finally {
         btn.disabled = false;
-        btn.innerHTML = "Cadastrar";
+        btn.innerHTML = originalText;
     }
 });
 

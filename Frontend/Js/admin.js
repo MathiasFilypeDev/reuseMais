@@ -1,114 +1,102 @@
-// ✅ Verificar se é admin
 function verificarLogin() {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
-
-    if (user.role !== "admin") {
-        alert("Acesso negado!");
-        window.location.href = "login.html";
-    }
-
-    carregarProdutos();
-}
-
-// ✅ Função auxiliar para requisições com token
-async function fetchComToken(url, options = {}) {
     const token = localStorage.getItem("token");
 
-    const headers = {
-        "Content-Type": "application/json",
-        ...options.headers
-    };
-
-    if (token) {
-        headers["Authorization"] = `Bearer ${token}`;
-    }
-
-    return fetch(url, {
-        ...options,
-        headers
-    });
-}
-
-// ✅ CARREGAR PRODUTOS
-async function carregarProdutos() {
-    try {
-        const response = await fetchComToken("http://localhost:5069/api/produtos");
-
-        if (!response.ok) throw new Error("Erro ao carregar produtos");
-
-        const produtos = await response.json();
-        exibirProdutosNaTabela(produtos);
-    } catch (error) {
-        console.error("Erro:", error);
-        showMessage("Erro ao carregar produtos", "danger");
-    }
-}
-
-// ✅ EXIBIR PRODUTOS
-function exibirProdutosNaTabela(produtos) {
-    const tbody = document.querySelector("#tabelaProdutos tbody");
-    tbody.innerHTML = "";
-
-    if (produtos.length === 0) {
-        tbody.innerHTML = "<tr><td colspan='7' class='text-center'>Nenhum produto encontrado</td></tr>";
+    if (!token || user.role !== "admin") {
+        alert("Acesso negado! Somente para administradores.");
+        window.location.href = "login.html";
         return;
     }
-
-    produtos.forEach(produto => {
-        const data = new Date(produto.dataCriacao).toLocaleDateString("pt-BR");
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>${produto.id}</td>
-            <td>${produto.nome}</td>
-            <td>${produto.categoria}</td>
-            <td>${produto.quantidade}</td>
-            <td><strong>${produto.criadoPorNome}</strong></td>
-            <td>${data}</td>
-            <td>
-                <button class="btn btn-sm btn-danger" onclick="deletarProduto(${produto.id})">🗑️ Deletar</button>
-            </td>
-        `;
-        tbody.appendChild(tr);
-    });
 }
 
-// ✅ DELETAR PRODUTO
-async function deletarProduto(id) {
-    if (!confirm("Tem certeza que deseja deletar este produto?")) return;
+// Carregar resumos iniciais
+async function carregarResumos() {
+    const produtos = await carregarEstatisticas("items", "all");
+    const usuarios = await carregarEstatisticas("users", "all");
 
+    document.getElementById("resumoProdutos").textContent = produtos.total || 0;
+    document.getElementById("resumoDisponiveis").textContent = produtos.disponiveis || 0;
+    document.getElementById("resumoSaidas").textContent = produtos.saidas || 0;
+    document.getElementById("resumoUsuarios").textContent = usuarios.logados || 0;
+    document.getElementById("resumoUsuariosCadastrados").textContent = usuarios.cadastrados || 0;
+}
+
+// Buscar estatísticas
+async function carregarEstatisticas(tipo, periodo) {
     try {
-        const response = await fetchComToken(`http://localhost:5069/api/produtos/${id}`, {
-            method: "DELETE"
-        });
-
-        if (!response.ok) throw new Error("Erro ao deletar produto");
-
-        showMessage("Produto deletado!", "success");
-        carregarProdutos();
-    } catch (error) {
-        showMessage("Erro ao deletar produto", "danger");
+        const response = await fetchComToken(`/stats/${tipo}?period=${periodo}`);
+        if (!response.ok) throw new Error("Erro ao carregar estatísticas");
+        return await response.json();
+    } catch {
+        return { labels: [], values: [], total: 0, disponiveis: 0, saidas: 0, logados: 0, cadastrados: 0 };
     }
 }
 
-// ✅ LOGOUT
-function logout() {
+// Atualizar gráficos
+async function atualizarGraficos() {
+    const periodoProdutos = document.getElementById("filtroProdutos").value;
+    const periodoUsuarios = document.getElementById("filtroUsuarios").value;
+
+    const dadosProdutos = await carregarEstatisticas("items", periodoProdutos);
+    const dadosUsuarios = await carregarEstatisticas("users", periodoUsuarios);
+
+    renderGrafico("graficoProdutos", "Produtos", dadosProdutos);
+    renderGrafico("graficoUsuarios", "Usuários", dadosUsuarios);
+}
+
+// Renderizar gráfico
+function renderGrafico(canvasId, titulo, dados) {
+    const ctx = document.getElementById(canvasId).getContext("2d");
+
+    if (window[canvasId]) {
+        window[canvasId].destroy();
+    }
+
+    window[canvasId] = new Chart(ctx, {
+        type: "pie",
+        data: {
+            labels: dados.labels,
+            datasets: [{
+                data: dados.values,
+                backgroundColor: [
+                    "#007bff", "#28a745", "#ffc107", "#dc3545",
+                    "#6f42c1", "#17a2b8", "#fd7e14"
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: titulo
+                }
+            }
+        }
+    });
+}
+
+// Botões
+document.getElementById("abrirModal").addEventListener("click", () => {
+    const modal = new bootstrap.Modal(document.getElementById("modalGraficos"));
+    modal.show();
+    atualizarGraficos();
+});
+
+document.getElementById("abrirModalFiltros").addEventListener("click", () => {
+    const modal = new bootstrap.Modal(document.getElementById("modalGraficos"));
+    modal.show();
+});
+
+document.getElementById("btnFiltrar").addEventListener("click", atualizarGraficos);
+
+document.getElementById("btnLogout").addEventListener("click", () => {
     localStorage.clear();
     window.location.href = "login.html";
-}
+});
 
-// ✅ MENSAGENS
-function showMessage(message, type) {
-    const container = document.createElement("div");
-    container.className = `alert alert-${type} text-center`;
-    container.textContent = message;
-
-    const alertContainer = document.createElement("div");
-    alertContainer.style.position = "fixed";
-    alertContainer.style.top = "80px";
-    alertContainer.style.right = "20px";
-    alertContainer.style.zIndex = "1000";
-    alertContainer.appendChild(container);
-    document.body.appendChild(alertContainer);
-
-    setTimeout(() => alertContainer.remove(), 3000);
-}
+// Inicialização
+window.onload = () => {
+    verificarLogin();
+    carregarResumos();
+};

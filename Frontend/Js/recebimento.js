@@ -1,6 +1,8 @@
 function verificarLogin() {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
     const token = localStorage.getItem("token");
-    if (!token) {
+
+    if (!user.id || !token) {
         alert("Você precisa estar logado!");
         window.location.href = "login.html";
     }
@@ -9,36 +11,35 @@ function verificarLogin() {
 document.getElementById("formMovimentacao").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const tipo = document.getElementById("tipo").value; // entrada ou saída
+    const tipo = document.getElementById("tipo").value;
     const itemId = document.getElementById("itemId").value;
     const quantidade = document.getElementById("quantidade").value;
-
     const token = localStorage.getItem("token");
 
-    const response = await fetch("http://localhost:5069/api/movimentacoes", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
-        },
-        body: JSON.stringify({ tipo, itemId, quantidade })
-    });
+    try {
+        const response = await fetch("http://localhost:5069/api/movimentacoes", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({ tipo, itemId, quantidade })
+        });
 
-    if (response.ok) {
-        const data = await response.json();
+        if (!response.ok) throw new Error();
+
         alert("Movimentação registrada com sucesso!");
         document.getElementById("formMovimentacao").reset();
         await carregarMovimentacoes();
-    } else {
+    } catch {
         alert("Erro ao registrar movimentação. Verifique se você tem permissão.");
     }
 });
 
 async function carregarMovimentacoes() {
     const token = localStorage.getItem("token");
-
     const response = await fetch("http://localhost:5069/api/movimentacoes", {
-        headers: { "Authorization": "Bearer " + token }
+        headers: { "Authorization": `Bearer ${token}` }
     });
 
     if (response.ok) {
@@ -54,7 +55,6 @@ async function carregarMovimentacoes() {
 }
 
 function logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.clear();
     window.location.href = "login.html";
 }
