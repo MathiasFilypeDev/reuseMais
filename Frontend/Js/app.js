@@ -1,4 +1,4 @@
-// app.js ou cadastroItens.js
+document.getElementById("getFullYear").textContent = new Date().getFullYear();
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("btn-home").addEventListener("click", () => {
         window.location.href = "index.html";
@@ -162,9 +162,6 @@ function getStoredItems() {
         document.getElementById("searchInput")?.addEventListener("input", filterItems);
         document.getElementById("categoryFilter")?.addEventListener("change", filterItems);
 
-        const year = document.getElementById("currentYear");
-        if (year) year.textContent = new Date().getFullYear();
-        // Fallback: qualquer elemento com atributo href dentro da navbar deverá navegar
         document.querySelectorAll('.navbar [href]').forEach(el => {
             el.addEventListener('click', (e) => {
                 const href = el.getAttribute('href');
