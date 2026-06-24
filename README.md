@@ -1,5 +1,5 @@
 # <h1 align="center"> REUSE MAIS + 🌐♻️</h1>
-<h3 align="center" font-size="20px">O site, um projeto, um propósito, vários beneficiados. Paixão que move multidões.</h3>
+<h3 align="center">O site, um projeto, um propósito, vários beneficiados. Paixão que move multidões.</h3>
 
 <div data-importer="stats" align="center">
   <img src="https://streak-stats.demolab.com?user=mathiasfilypedev&locale=en&mode=daily&theme=dracula&hide_border=false&border_radius=5&order=3" height="150" alt="streak graph" /> <br>
