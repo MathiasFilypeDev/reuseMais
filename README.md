@@ -1,6 +1,10 @@
 # <h1 align="center"> REUSE MAIS + 🌐♻️</h1>
 <h1 align="center">O site, um projeto, um propósito, vários beneficiados. Paixão que move multidões.</h1>
 
+<div data-importer="stats" align="center">
+  <img src="https://streak-stats.demolab.com?user=mathiasfilypedev&locale=en&mode=daily&theme=dracula&hide_border=false&border_radius=5&order=3" height="150" alt="streak graph" /> <br>
+</div>
+
 ###
 <h3>Linguagens e ferramentas</h3>
 <div align="center">
@@ -75,9 +79,4 @@ Ele conecta usuários e administradores em um fluxo simples de **cadastro, login
 |_📄LICENSE
 |_📄README.md
 ```
-
-<div data-importer="stats" align="center">
-  <img src="https://streak-stats.demolab.com?user=mathiasfilypedev&locale=en&mode=daily&theme=dracula&hide_border=false&border_radius=5&order=3" height="150" alt="streak graph" /> <br>
-</div>
-
 ###
