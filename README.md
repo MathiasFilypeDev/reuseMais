@@ -20,8 +20,8 @@
   <img width="12" />
 </div>
 
-# <h1 align="center"> REUSE MAIS + 🌐♻️</h1>
-<h2 align="center">Um projeto de sustentabilidade e reaproveitamento de materiais</h2>
+# <h3 align="center"> REUSE MAIS + 🌐♻️</h3>
+<h3 align="center">Um projeto de sustentabilidade e reaproveitamento de materiais</h3>
 
 
 ## 🚀 Visão Geral
