@@ -78,15 +78,6 @@ Ele conecta usuários e administradores em um fluxo simples de **cadastro, login
 
 <div data-importer="stats" align="center">
   <img src="https://streak-stats.demolab.com?user=mathiasfilypedev&locale=en&mode=daily&theme=dracula&hide_border=false&border_radius=5&order=3" height="150" alt="streak graph" /> <br>
-  <img src="https://raw.githubusercontent.com/mathiasfilypedev/mathiasfilypedev/activity-graph-output/activity-graph.svg?radius=16&theme=dracula&area=true&order=5" height="300" alt="activity-graph graph"  />
 </div>
-
-###
-
-<picture data-importer="pacman">
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/mathiasfilypedev/mathiasfilypedev/pacman-output/pacman-contribution-graph-dark.svg?game=pacman">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/mathiasfilypedev/mathiasfilypedev/pacman-output/pacman-contribution-graph.svg?game=pacman">
-  <img alt="pacman contribution graph" src="https://raw.githubusercontent.com/mathiasfilypedev/mathiasfilypedev/pacman-output/pacman-contribution-graph.svg?game=pacman">
-</picture>
 
 ###
