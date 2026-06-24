@@ -20,10 +20,6 @@
   <img width="12" />
 </div>
 
-# <h3 align="center"> REUSE MAIS + 🌐♻️</h3>
-<h3 align="center">Um projeto de sustentabilidade e reaproveitamento de materiais</h3>
-
-
 ## 🚀 Visão Geral
 O **Reuse+** é um sistema web voltado para **gestão de itens e reaproveitamento sustentável**.  
 Ele conecta usuários e administradores em um fluxo simples de **cadastro, login e gerenciamento de itens**, permitindo:
