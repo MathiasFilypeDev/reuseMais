@@ -10,52 +10,67 @@
     <script src="js/cadastro.js"></script>
 </head>
 
-<body class="bg-light">
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card shadow">
-                    <div class="card-body">
-                        <h2 class="text-center mb-4">📝 Cadastre-se</h2>
+<body class="bg-secondary">
 
-                        <div id="msgArea"></div>
+    <nav class="navbar navbar-expand-lg mb-4 navbar-dark bg-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Reuse+</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-                        <form id="formRegistro">
-                            <div class="mb-3">
-                                <label for="nome" class="form-label">Nome:</label>
-                                <input type="text" id="nome" class="form-control" placeholder="Seu nome" required>
-                            </div>
+    <main class="my-4">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card shadow">
+                        <div class="card-body bg-black">
+                            <h2 class="text-center text-light mb-4">📝 Cadastre-se</h2>
 
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email:</label>
-                                <input type="email" id="email" class="form-control" placeholder="seu@email.com"
-                                    required>
-                            </div>
+                            <div id="msgArea"></div>
 
-                            <div class="mb-3">
-                                <label for="senha" class="form-label">Senha:</label>
-                                <input type="password" id="senha" class="form-control" placeholder="Sua senha" required>
-                            </div>
+                            <form id="formCadastro">
+                                <div class="mb-3">
+                                    <label for="nome" class="form-label text-light">Nome:</label>
+                                    <input type="text" id="nome" class="form-control" placeholder="Seu nome" required>
+                                </div>
 
-                            <div class="mb-3">
-                                <label for="confirmarSenha" class="form-label">Confirmar Senha:</label>
-                                <input type="password" id="confirmarSenha" class="form-control"
-                                    placeholder="Confirme sua senha" required>
-                            </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label text-light">Email:</label>
+                                    <input type="email" id="email" class="form-control" placeholder="seu@email.com"
+                                        required>
+                                </div>
 
-                            <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
-                        </form>
+                                <div class="mb-3">
+                                    <label for="senha" class="form-label text-light">Senha:</label>
+                                    <input type="password" id="senha" class="form-control" placeholder="Sua senha"
+                                        required>
+                                </div>
 
-                        <p class="text-center mt-3">
-                            Já tem conta? <a href="login.html">Faça login</a>
-                        </p>
+                                <div class="mb-3">
+                                    <label for="confirmarSenha" class="form-label text-light">Confirmar Senha:</label>
+                                    <input type="password" id="confirmarSenha" class="form-control"
+                                        placeholder="Confirme sua senha" required>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
+                            </form>
+
+                            <p class="text-center text-secondary mt-3">
+                                Já tem conta? <a href="login.html">Faça login</a>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    
-     <footer class="footer d-flex pb-2 justify-content-center fs-5">
+    </main>
+
+    <footer class="footer d-flex pb-2 justify-content-center fs-5 bg-black text-light">
         <small>© <span id="getFullYear"></span> Reuse+. Todos os direitos reservados.</small>
     </footer>
 

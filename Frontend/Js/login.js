@@ -5,7 +5,6 @@ document.getElementById("formLogin").addEventListener("submit", async (e) => {
     const password = document.getElementById("password").value.trim();
     const roleElement = document.querySelector('input[name="tipoUsuario"]:checked');
 
-    // Validação inicial
     if (!username || !password) {
         return showMessage("Preencha todos os campos!", "warning");
     }
@@ -21,14 +20,30 @@ document.getElementById("formLogin").addEventListener("submit", async (e) => {
 
     try {
 
+        if (username === "User" && password === "user123") {
+            const defaultUser = {
+                id: 1,
+                nome: "Usuário Padrão",
+                email: "user@reuse.com",
+                role: "user"
+            };
+            localStorage.setItem("token", "user-token");
+            localStorage.setItem("user", JSON.stringify(defaultUser));
+
+            showMessage("Login realizado com sucesso! 🎉", "success");
+            setTimeout(() => window.location.href = "principal.html", 1000);
+            return;
+        }
+
+        // Administrador mock
         if (username === "Admin" && password === "admin123") {
             const adminUser = {
                 id: 0,
                 nome: "Administrador",
                 email: "admin@reuse.com",
-                role: "admin"   // ✅ GARANTIR QUE ROLE SEJA 'admin'
+                role: "admin"
             };
-            localStorage.setItem("token", "admin-token"); // token fictício
+            localStorage.setItem("token", "admin-token");
             localStorage.setItem("user", JSON.stringify(adminUser));
 
             showMessage("Login de administrador realizado com sucesso!", "success");
@@ -36,6 +51,7 @@ document.getElementById("formLogin").addEventListener("submit", async (e) => {
             return;
         }
 
+        // Login via API
         const response = await fetch("http://localhost:5069/api/users/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -52,7 +68,6 @@ document.getElementById("formLogin").addEventListener("submit", async (e) => {
             return showMessage("Erro: resposta inválida do servidor.", "danger");
         }
 
-        // ✅ Salvar dados do usuário
         const userData = {
             id: data.id,
             nome: data.nome || username,

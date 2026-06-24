@@ -1,17 +1,11 @@
 document.getElementById("getFullYear").textContent = new Date().getFullYear();
-document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("btn-home").addEventListener("click", () => {
-        window.location.href = "index.html";
-    });
 
-    document.getElementById("btn-principal").addEventListener("click", () => {
-        window.location.href = "principal.html";
-    });
+const btnHome = document.getElementById("btn-home").addEventListener("click", () => {
+    window.location.href = "index.html";
+});
 
-    
-    document.getElementById("btn-sobre").addEventListener("click", () => {
-        window.location.href = "about.html";
-    });
+document.getElementById("btn-sobre")?.addEventListener("click", () => {
+    window.location.href = "about.html";
 });
 
 
